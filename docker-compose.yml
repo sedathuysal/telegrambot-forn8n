@@ -19,12 +19,6 @@ services:
       - .env
     ports:
       - "${API_PORT:-5000}:5000"  # API Sunucusu port'u
-    logs:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    # Ağ ayarları (opsiyonel)
     networks:
       - telegram-net
 
