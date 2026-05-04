@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: telegram-bot
+    restart: unless-stopped
+    environment:
+      # .env dosyasından değişkenleri yükle
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
+      - API_PORT=${API_PORT:-5000}
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-10}
+    env_file:
+      - .env
+    ports:
+      - "${API_PORT:-5000}:5000"  # API Sunucusu port'u
+    logs:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Ağ ayarları (opsiyonel)
+    networks:
+      - telegram-net
+
+networks:
+  telegram-net:
+    driver: bridge

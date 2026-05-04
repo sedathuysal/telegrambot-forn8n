@@ -1,0 +1,96 @@
+{
+  "version": "2",
+  "templates": [
+    {
+      "type": 3,
+      "title": "Telegram Bot - N8N Integration",
+      "name": "telegram-bot",
+      "description": "Telegram bot that sends messages to N8N webhooks and receives messages from N8N via HTTP API",
+      "categories": ["Bot", "Automation", "Messaging"],
+      "platform": "linux",
+      "logo": "https://telegram.org/img/t_logo.png",
+      "image": "python:3.11-slim",
+      "repository": {
+        "url": "https://github.com/your-repo/telegrambot.git",
+        "stackfile": "docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "TELEGRAM_BOT_TOKEN",
+          "label": "Telegram Bot Token",
+          "description": "Get from @BotFather on Telegram",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "N8N_WEBHOOK_URL",
+          "label": "N8N Webhook URL",
+          "description": "N8N workflow webhook endpoint (https://n8n.example.com/webhook/telegram)",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "API_PORT",
+          "label": "API Port",
+          "description": "Port for receiving messages from N8N",
+          "type": "text",
+          "default": "5000"
+        },
+        {
+          "name": "DEBUG",
+          "label": "Debug Mode",
+          "description": "Enable debug mode (true/false)",
+          "type": "text",
+          "default": "false"
+        },
+        {
+          "name": "LOG_LEVEL",
+          "label": "Log Level",
+          "description": "DEBUG, INFO, WARNING, ERROR, CRITICAL",
+          "type": "select",
+          "default": "INFO",
+          "select": [
+            {
+              "text": "DEBUG",
+              "value": "DEBUG"
+            },
+            {
+              "text": "INFO",
+              "value": "INFO"
+            },
+            {
+              "text": "WARNING",
+              "value": "WARNING"
+            },
+            {
+              "text": "ERROR",
+              "value": "ERROR"
+            },
+            {
+              "text": "CRITICAL",
+              "value": "CRITICAL"
+            }
+          ]
+        },
+        {
+          "name": "REQUEST_TIMEOUT",
+          "label": "Request Timeout",
+          "description": "Timeout for webhook requests (seconds)",
+          "type": "text",
+          "default": "10"
+        }
+      ],
+      "network": "telegram-net",
+      "ports": [
+        "5000:5000/tcp"
+      ],
+      "restart_policy": "unless-stopped",
+      "volumes": [
+        {
+          "container": "/app/logs",
+          "bind": "/var/lib/docker/volumes/telegram-bot-logs/_data"
+        }
+      ]
+    }
+  ]
+}
